@@ -120,40 +120,40 @@ wardrobe_data = [
     
     # トップス - 襯衫
     ('基本款襯衫_白色（ホワイト）_M', 'DEMO201', 'https://example.com/demo201', '白色（ホワイト）', 'M',
-     'https://cdn.grail.bz/images/goods/d/rd135/rd135_col_12.jpg', 1610, 'トップス', 'シャツ・ブラウス', 1, '2024-03-05'),
+     'https://cdn.grail.bz/images/goods/d/k9206d/k9206d_col_52.jpg', 1610, 'トップス', 'シャツ・ブラウス', 1, '2024-03-05'),
     
     ('蕾絲襯衫_米色（ベージュ）_S', 'DEMO202', 'https://example.com/demo202', '米色（ベージュ）', 'S',
-     'https://cdn.grail.bz/images/goods/d/tm1127/tm1127_col_16.jpg', 1840, 'トップス', 'シャツ・ブラウス', 1, '2024-03-12'),
+     'https://cdn.grail.bz/images/goods/d/k9064b/k9064b_col_40.jpg', 1840, 'トップス', 'シャツ・ブラウス', 1, '2024-03-12'),
     
     # トップス - T恤
     ('基本款T恤_黑色的（ブラック）_M', 'DEMO301', 'https://example.com/demo301', '黑色的（ブラック）', 'M',
-     'https://cdn.grail.bz/images/goods/d/tt087/tt087_col_11.jpg', 920, 'トップス', 'カットソー', 1, '2024-04-01'),
+     'https://cdn.grail.bz/images/goods/d/dr679/dr679_col_59.jpg', 920, 'トップス', 'カットソー', 1, '2024-04-01'),
     
     # アウター - 夾克
     ('牛仔夾克_藍色（ブルー）_M', 'DEMO401', 'https://example.com/demo401', '藍色（ブルー）', 'M',
-     'https://cdn.grail.bz/images/goods/d/ja055/ja055_col_23.jpg', 2530, 'アウター', 'ジャケット', 1, '2024-01-10'),
+     'https://cdn.grail.bz/images/goods/d/ze749/ze749_col_56.jpg', 2530, 'アウター', 'ジャケット', 1, '2024-01-10'),
     
     ('西裝外套_黑色的（ブラック）_M', 'DEMO402', 'https://example.com/demo402', '黑色的（ブラック）', 'M',
-     'https://cdn.grail.bz/images/goods/d/ja076/ja076_col_11.jpg', 3220, 'アウター', 'ジャケット', 1, '2024-02-05'),
+     'https://cdn.grail.bz/images/goods/d/dr672a/dr672a_col_17.jpg', 3220, 'アウター', 'ジャケット', 1, '2024-02-05'),
     
     # アウター - 大衣
     ('長版大衣_駝色（キャメル）_L', 'DEMO501', 'https://example.com/demo501', '駝色（キャメル）', 'L',
-     'https://cdn.grail.bz/images/goods/d/cd035/cd035_col_14.jpg', 4025, 'アウター', 'コート', 1, '2024-01-05'),
+     'https://cdn.grail.bz/images/goods/d/dr616a/dr616a_col_26.jpg', 4025, 'アウター', 'コート', 1, '2024-01-05'),
     
     # ワンピース - 素色
     ('基本款連身裙_黑色的（ブラック）_M', 'DEMO601', 'https://example.com/demo601', '黑色的（ブラック）', 'M',
-     'https://cdn.grail.bz/images/goods/d/op1090/op1090_col_11.jpg', 2070, 'ワンピース', '無地', 1, '2024-02-20'),
+     'https://cdn.grail.bz/images/goods/d/al94/al94_col_56.jpg', 2070, 'ワンピース', '無地', 1, '2024-02-20'),
     
     ('針織連身裙_米色（ベージュ）_S', 'DEMO602', 'https://example.com/demo602', '米色（ベージュ）', 'S',
-     'https://cdn.grail.bz/images/goods/d/kn069/kn069_col_16.jpg', 2300, 'ワンピース', '無地', 1, '2024-03-15'),
+     'https://cdn.grail.bz/images/goods/d/k9205z/k9205z_col_11.jpg', 2300, 'ワンピース', '無地', 1, '2024-03-15'),
     
     # ワンピース - 圖案
     ('花卉連身裙_花色（フラワー）_M', 'DEMO701', 'https://example.com/demo701', '花色（フラワー）', 'M',
-     'https://cdn.grail.bz/images/goods/d/po064/po064_col_21.jpg', 2185, 'ワンピース', '柄', 1, '2024-04-10'),
+     'https://cdn.grail.bz/images/goods/d/dk1292/dk1292_col_21.jpg', 2185, 'ワンピース', '柄', 1, '2024-04-10'),
     
     # ワンピース - 背心裙
     ('背心連身裙_黑色的（ブラック）_M', 'DEMO801', 'https://example.com/demo801', '黑色的（ブラック）', 'M',
-     'https://cdn.grail.bz/images/goods/d/js021/js021_col_11.jpg', 1955, 'ワンピース', 'ジャンパースカート', 1, '2024-03-20'),
+     'https://cdn.grail.bz/images/goods/d/sm42/sm42_col_11.jpg', 1955, 'ワンピース', 'ジャンパースカート', 1, '2024-03-20'),
     
     # ボトムス - 裙子
     ('薄紗分層裙子_黑色的（ブラック）_S', 'DEMO1122', 'https://example.com/demo1122', '黑色的（ブラック）', 'S', 
@@ -164,19 +164,19 @@ wardrobe_data = [
     
     # ボトムス - 人魚裙
     ('人魚裙_黑色的（ブラック）_M', 'DEMO901', 'https://example.com/demo901', '黑色的（ブラック）', 'M',
-     'https://cdn.grail.bz/images/goods/d/tm1127/tm1127_col_11.jpg', 1840, 'ボトムス', 'マーメイドスカート', 1, '2024-02-25'),
+     'https://cdn.grail.bz/images/goods/d/dk1080/dk1080_col_28.jpg', 1840, 'ボトムス', 'マーメイドスカート', 1, '2024-02-25'),
     
     # ボトムス - 喇叭裙
     ('喇叭裙_米色（ベージュ）_S', 'DEMO1001', 'https://example.com/demo1001', '米色（ベージュ）', 'S',
-     'https://cdn.grail.bz/images/goods/d/ts1084/ts1084_col_16.jpg', 1610, 'ボトムス', 'フレアスカート', 1, '2024-03-08'),
+     'https://cdn.grail.bz/images/goods/d/tu1082/tu1082_col_11.jpg', 1610, 'ボトムス', 'フレアスカート', 1, '2024-03-08'),
     
     # ボトムス - 迷你裙
     ('迷你裙_黑色的（ブラック）_S', 'DEMO1101', 'https://example.com/demo1101', '黑色的（ブラック）', 'S',
-     'https://cdn.grail.bz/images/goods/d/ts1082/ts1082_col_11.jpg', 1380, 'ボトムス', 'ミニスカート', 1, '2024-04-05'),
+     'https://cdn.grail.bz/images/goods/d/gm728/gm728_col_11.jpg', 1380, 'ボトムス', 'ミニスカート', 1, '2024-04-05'),
     
     # ボトムス - 褲子
     ('直筒長褲_黑色的（ブラック）_M', 'DEMO1201', 'https://example.com/demo1201', '黑色的（ブラック）', 'M',
-     'https://cdn.grail.bz/images/goods/d/pa1057/pa1057_col_11.jpg', 2070, 'ボトムス', 'パンツ・デニム', 1, '2024-02-10'),
+     'https://cdn.grail.bz/images/goods/d/ks003/ks003_col_21.jpg', 2070, 'ボトムス', 'パンツ・デニム', 1, '2024-02-10'),
     
     # シューズ - 長靴
     ('Ultra伸展厚實的腳跟長靴子_象牙（アイボリー）_23.0cm', 'DEMO1186', 'https://example.com/demo1186', '象牙（アイボリー）', '23.0cm',
@@ -188,7 +188,7 @@ wardrobe_data = [
     
     # アクセサリー - 腰帶
     ('編織腰帶_黑色的（ブラック）_Free', 'DEMO1301', 'https://example.com/demo1301', '黑色的（ブラック）', 'Free',
-     'https://cdn.grail.bz/images/goods/d/bl044/bl044_col_11.jpg', 690, 'アクセサリー', 'ベルト', 1, '2024-04-15'),
+     'https://cdn.grail.bz/images/goods/d/tr98/tr98_col_19.jpg', 690, 'アクセサリー', 'ベルト', 1, '2024-04-15'),
 ]
 
 # 插入商品資料
