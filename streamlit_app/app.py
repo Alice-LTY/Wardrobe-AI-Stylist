@@ -162,6 +162,18 @@ st.markdown("""
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_PATH = os.path.join(BASE_DIR, 'database', 'wardrobe.db')
 
+# 分類順序 (與爬蟲設定一致)
+CATEGORY_ORDER = [
+    "トップス",           # 上衣
+    "アウター",           # 外套
+    "ワンピース",         # 洋裝
+    "ボトムス",           # 下身
+    "シューズ",           # 鞋子
+    "バッグ・カバン",     # 包包
+    "アクセサリー",       # 配件
+    "セットアイテム",     # 套裝
+]
+
 # --- Helper Functions ---
 def load_wardrobe_data():
     """從 SQLite 讀取衣櫥資料"""
@@ -284,8 +296,12 @@ else:
     st.markdown("---")
     st.markdown("## 我的衣櫥")
     
-    # 分類顯示
-    categories = df['category'].unique()
+    # 分類顯示 (按照爬蟲設定的順序)
+    all_categories = df['category'].unique()
+    # 依照 CATEGORY_ORDER 排序，未在清單中的放最後
+    categories = [cat for cat in CATEGORY_ORDER if cat in all_categories]
+    categories += [cat for cat in all_categories if cat not in CATEGORY_ORDER]
+    
     for category in categories:
         # 分類標題徽章
         st.markdown(f'<div class="category-badge">{category}</div>', unsafe_allow_html=True)
