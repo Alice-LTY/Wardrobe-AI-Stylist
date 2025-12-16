@@ -23,10 +23,11 @@ def load_wardrobe_data():
         return pd.DataFrame()
     
     conn = sqlite3.connect(DB_PATH)
-    # 這裡假設你的表格名稱是 'wardrobe'，且有 product_code, title, color_name 等欄位
+    # JOIN products 表格以獲取商品標題
     query = """
-    SELECT w.key, w.title, w.color_name, w.category, w.image_url, w.subcategory 
+    SELECT w.key, p.title, w.color_name, w.category, w.image_url, w.subcategory 
     FROM wardrobe w
+    LEFT JOIN products p ON w.product_code = p.product_code
     """
     try:
         df = pd.read_sql(query, conn)
