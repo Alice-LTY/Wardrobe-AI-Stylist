@@ -10,91 +10,149 @@ from io import BytesIO
 # --- Page Config ---
 st.set_page_config(page_title="Wardrobe AI Stylist", page_icon="👗", layout="wide")
 
-# --- Custom CSS ---
+# --- Custom CSS (模仿 React App 配色) ---
 st.markdown("""
 <style>
-    /* 主要容器 */
+    /* 全局樣式 - 模仿 React App */
     .main {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        background-color: #ffffff;
+        font-family: "Roboto", sans-serif;
     }
     
-    /* 商品卡片樣式 */
+    .block-container {
+        max-width: 1600px;
+        padding: 40px 60px;
+    }
+    
+    /* 商品卡片樣式 - 模仿 GRL 電商風格 */
     .product-card {
-        background: white;
-        border-radius: 15px;
-        padding: 15px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background-color: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
         margin-bottom: 20px;
         height: 100%;
     }
     
     .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.15);
     }
     
     .product-image {
-        border-radius: 10px;
         width: 100%;
+        height: auto;
         object-fit: cover;
+        transition: transform 0.3s ease;
+        background-color: #f3f4f6;
+    }
+    
+    .product-card:hover .product-image {
+        transform: scale(1.05);
     }
     
     .product-title {
         font-size: 14px;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-top: 10px;
+        font-weight: 400;
+        color: #111111;
+        margin: 9px 0px;
         text-align: center;
-        height: 40px;
+        padding: 0 10px;
         overflow: hidden;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+        line-height: 1.4;
     }
     
     .product-color {
         font-size: 12px;
-        color: #7f8c8d;
+        color: #484848;
         text-align: center;
-        margin-top: 5px;
+        margin: 4px 0px 10px;
     }
     
+    /* 分類標籤 - 使用 React App 粉紫色系 */
     .category-badge {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 8px 20px;
-        border-radius: 20px;
+        background-color: transparent;
+        color: #c691a5;
+        padding: 8px 0px;
+        border-radius: 0px;
         display: inline-block;
-        font-weight: 600;
-        margin: 10px 0;
+        font-weight: 400;
+        font-size: 19px;
+        margin: 39px 0px 19px;
+        border-bottom: 2px solid #c691a5;
     }
     
-    /* AI 建議區塊 */
+    /* AI 建議區塊 - 使用粉紫色系 */
     .ai-advice-box {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        background-color: #f9f5f7;
+        border-left: 4px solid #c691a5;
         padding: 25px;
-        border-radius: 15px;
-        color: white;
+        border-radius: 12px;
+        color: #111111;
         margin: 20px 0;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+    
+    .ai-advice-box h3 {
+        color: #c691a5;
+        margin-top: 0;
+        font-size: 19px;
     }
     
     /* 標題樣式 */
     h1 {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 3em;
-        font-weight: 800;
+        color: #000000;
+        font-size: 29px;
+        font-weight: 400;
         text-align: center;
         padding: 20px 0;
+        margin-bottom: 19px;
+    }
+    
+    h2 {
+        color: #c691a5;
+        font-size: 14px;
+        margin: 99px 0px 0px;
     }
     
     /* 統計卡片 */
     [data-testid="stMetricValue"] {
         font-size: 2em;
-        color: #667eea;
+        color: #c691a5;
+    }
+    
+    [data-testid="stMetricLabel"] {
+        color: #484848;
+        font-size: 14px;
+    }
+    
+    /* 按鈕樣式 */
+    .stButton > button {
+        background-color: #c691a5;
+        color: white;
+        border-radius: 9px;
+        border: 2px solid #c195ac;
+        padding: 9px 19px;
+        font-size: 14px;
+        transition: background-color 0.4s ease;
+    }
+    
+    .stButton > button:hover {
+        background-color: #a9738b;
+        border-color: #a9738b;
+    }
+    
+    /* 輸入框樣式 */
+    .stTextInput > div > div > input {
+        border-radius: 19px;
+        border: 2px solid #ccc;
+        padding: 14px 19px;
+        font-size: 14px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -198,13 +256,13 @@ else:
             # AI 建議區塊
             st.markdown(f"""
             <div class="ai-advice-box">
-                <h3 style="color: white; margin-top: 0;">💡 AI 穿搭建議</h3>
-                <p style="font-size: 16px; line-height: 1.6;">{advice}</p>
+                <h3>💡 AI 穿搭建議</h3>
+                <p style="font-size: 14px; line-height: 1.6; color: #111111;">{advice}</p>
             </div>
             """, unsafe_allow_html=True)
             
             # Bonus: 嘗試顯示 AI 提到的衣服圖片 (簡單關鍵字比對)
-            st.markdown("#### 🎯 推薦單品")
+            st.markdown("#### 推薦單品")
             img_cols = st.columns(4)
             col_idx = 0
             for idx, row in df.iterrows():
@@ -217,14 +275,14 @@ else:
                             <div class="product-card">
                                 <img src="{row['image_url']}" class="product-image" alt="{row['title']}">
                                 <div class="product-title">{row['title'][:30]}...</div>
-                                <div class="product-color">🎨 {row['color_name']}</div>
+                                <div class="product-color"> {row['color_name']}</div>
                             </div>
                             """
                             st.markdown(card_html, unsafe_allow_html=True)
                         col_idx += 1
 
     st.markdown("---")
-    st.markdown("## 📦 我的衣櫥")
+    st.markdown("## 我的衣櫥")
     
     # 分類顯示
     categories = df['category'].unique()
@@ -242,7 +300,7 @@ else:
                 <div class="product-card">
                     <img src="{item['image_url']}" class="product-image" alt="{item['title']}">
                     <div class="product-title">{item['title'][:30]}...</div>
-                    <div class="product-color">🎨 {item['color_name']}</div>
+                    <div class="product-color"> {item['color_name']}</div>
                 </div>
                 """
                 st.markdown(card_html, unsafe_allow_html=True)
