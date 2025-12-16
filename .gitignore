@@ -4,8 +4,8 @@
 *.db
 *.sqlite
 *.sqlite3
-database/wardrobe.db
-database/wishlist.db
+# 例外：允許範例資料庫用於 Streamlit Demo
+!database/wardrobe.db
 
 # 個人資料匯出
 exports/
