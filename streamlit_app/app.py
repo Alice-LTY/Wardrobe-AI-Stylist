@@ -10,6 +10,95 @@ from io import BytesIO
 # --- Page Config ---
 st.set_page_config(page_title="Wardrobe AI Stylist", page_icon="👗", layout="wide")
 
+# --- Custom CSS ---
+st.markdown("""
+<style>
+    /* 主要容器 */
+    .main {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+    
+    /* 商品卡片樣式 */
+    .product-card {
+        background: white;
+        border-radius: 15px;
+        padding: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 20px;
+        height: 100%;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .product-image {
+        border-radius: 10px;
+        width: 100%;
+        object-fit: cover;
+    }
+    
+    .product-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-top: 10px;
+        text-align: center;
+        height: 40px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+    
+    .product-color {
+        font-size: 12px;
+        color: #7f8c8d;
+        text-align: center;
+        margin-top: 5px;
+    }
+    
+    .category-badge {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: 600;
+        margin: 10px 0;
+    }
+    
+    /* AI 建議區塊 */
+    .ai-advice-box {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        padding: 25px;
+        border-radius: 15px;
+        color: white;
+        margin: 20px 0;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* 標題樣式 */
+    h1 {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 3em;
+        font-weight: 800;
+        text-align: center;
+        padding: 20px 0;
+    }
+    
+    /* 統計卡片 */
+    [data-testid="stMetricValue"] {
+        font-size: 2em;
+        color: #667eea;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # --- Setup ---
 # 自動尋找資料庫路徑 (假設在專案根目錄的 database 資料夾)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -97,19 +186,25 @@ else:
     st.markdown("---")
 
     # AI Interaction Section
-    st.subheader("🤖 請問造型師")
+    st.subheader("智慧衣櫥造型師")
     user_input = st.text_input("今天要去哪裡？心情如何？（例如：明天要去面試，想要正式一點但不要太老氣）")
     
-    if st.button("生成穿搭建議", type="primary"):
+    if st.button("✨ 生成穿搭建議", type="primary", use_container_width=True):
         if not api_key:
             st.error("請輸入 API Key 才能呼叫 AI。")
         else:
             advice = get_ai_advice(user_input, df, api_key)
-            st.markdown("### 💡 AI 建議")
-            st.write(advice)
+            
+            # AI 建議區塊
+            st.markdown(f"""
+            <div class="ai-advice-box">
+                <h3 style="color: white; margin-top: 0;">💡 AI 穿搭建議</h3>
+                <p style="font-size: 16px; line-height: 1.6;">{advice}</p>
+            </div>
+            """, unsafe_allow_html=True)
             
             # Bonus: 嘗試顯示 AI 提到的衣服圖片 (簡單關鍵字比對)
-            st.markdown("#### 相關單品參考")
+            st.markdown("#### 🎯 推薦單品")
             img_cols = st.columns(4)
             col_idx = 0
             for idx, row in df.iterrows():
@@ -118,9 +213,38 @@ else:
                 if row['title'][:5] in advice or row['color_name'] in advice: 
                     if col_idx < 4:
                         with img_cols[col_idx]:
-                            st.image(row['image_url'], caption=row['title'])
+                            card_html = f"""
+                            <div class="product-card">
+                                <img src="{row['image_url']}" class="product-image" alt="{row['title']}">
+                                <div class="product-title">{row['title'][:30]}...</div>
+                                <div class="product-color">🎨 {row['color_name']}</div>
+                            </div>
+                            """
+                            st.markdown(card_html, unsafe_allow_html=True)
                         col_idx += 1
 
     st.markdown("---")
-    st.subheader("📦 目前衣櫥庫存 (Database View)")
-    st.dataframe(df)
+    st.markdown("## 📦 我的衣櫥")
+    
+    # 分類顯示
+    categories = df['category'].unique()
+    for category in categories:
+        # 分類標題徽章
+        st.markdown(f'<div class="category-badge">{category}</div>', unsafe_allow_html=True)
+        category_items = df[df['category'] == category]
+        
+        # 每行顯示 4 件商品
+        cols = st.columns(4)
+        for idx, (_, item) in enumerate(category_items.iterrows()):
+            with cols[idx % 4]:
+                # 使用 HTML 創建卡片效果
+                card_html = f"""
+                <div class="product-card">
+                    <img src="{item['image_url']}" class="product-image" alt="{item['title']}">
+                    <div class="product-title">{item['title'][:30]}...</div>
+                    <div class="product-color">🎨 {item['color_name']}</div>
+                </div>
+                """
+                st.markdown(card_html, unsafe_allow_html=True)
+        
+        st.markdown("<br>", unsafe_allow_html=True)
