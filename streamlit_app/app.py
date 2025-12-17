@@ -8,7 +8,7 @@ import requests
 from io import BytesIO
 
 # --- Page Config ---
-st.set_page_config(page_title="Wardrobe AI Stylist", page_icon="👗", layout="wide")
+st.set_page_config(page_title="Wardrobe AI Stylist", layout="wide")
 
 # --- Custom CSS (模仿 React App 配色) ---
 st.markdown("""
@@ -249,9 +249,7 @@ if df.empty:
     st.warning("目前衣櫥是空的，請先使用主程式加入一些衣服！")
 else:
     # Top Section: Stats
-    col1, col2, col3 = st.columns(3)
-    col1.metric("衣櫥總數", f"{len(df)} 件")
-    col2.metric("包含類別", f"{len(df['category'].unique())} 種")
+    st.metric("衣櫥總數", f"{len(df)} 件")
     
     st.markdown("---")
 
@@ -307,18 +305,26 @@ else:
         st.markdown(f'<div class="category-badge">{category}</div>', unsafe_allow_html=True)
         category_items = df[df['category'] == category]
         
-        # 每行顯示 4 件商品
-        cols = st.columns(4)
-        for idx, (_, item) in enumerate(category_items.iterrows()):
-            with cols[idx % 4]:
-                # 使用 HTML 創建卡片效果
-                card_html = f"""
-                <div class="product-card">
-                    <img src="{item['image_url']}" class="product-image" alt="{item['title']}">
-                    <div class="product-title">{item['title'][:30]}...</div>
-                    <div class="product-color"> {item['color_name']}</div>
-                </div>
-                """
-                st.markdown(card_html, unsafe_allow_html=True)
+        # 按子分類分組顯示
+        subcategories = category_items['subcategory'].unique()
+        for subcategory in subcategories:
+            if subcategory and pd.notna(subcategory):
+                st.markdown(f'<h3 style="color: #484848; font-size: 19px; margin: 19px 0px 9px;">{subcategory}</h3>', unsafe_allow_html=True)
+            
+            subcategory_items = category_items[category_items['subcategory'] == subcategory]
+            
+            # 每行顯示 4 件商品
+            cols = st.columns(4)
+            for idx, (_, item) in enumerate(subcategory_items.iterrows()):
+                with cols[idx % 4]:
+                    # 使用 HTML 創建卡片效果
+                    card_html = f"""
+                    <div class="product-card">
+                        <img src="{item['image_url']}" class="product-image" alt="{item['title']}">
+                        <div class="product-title">{item['title'][:30]}...</div>
+                        <div class="product-color">{item['color_name']}</div>
+                    </div>
+                    """
+                    st.markdown(card_html, unsafe_allow_html=True)
         
         st.markdown("<br>", unsafe_allow_html=True)
