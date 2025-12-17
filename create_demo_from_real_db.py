@@ -70,7 +70,7 @@ for product_code in selected_product_codes:
         target_cursor.execute(f"INSERT INTO products VALUES ({placeholders})", row)
 
 # 複製選中的衣櫥資料
-print("👗 複製衣櫥資料...")
+print(" 複製衣櫥資料...")
 for key in selected_keys:
     source_cursor.execute("SELECT * FROM wardrobe WHERE key = ?", (key,))
     row = source_cursor.fetchone()

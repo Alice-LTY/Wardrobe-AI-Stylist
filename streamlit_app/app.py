@@ -9,6 +9,19 @@ from datetime import datetime
 # 添加父目錄到 path 以導入 backend 模組
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+
+try:
+    from backend.utils.category_translations import (
+        get_category_display_name,
+        get_subcategory_display_name
+    )
+except ImportError:
+    # 如果無法導入，使用預設函數
+    def get_category_display_name(cat):
+        return cat
+    def get_subcategory_display_name(subcat):
+        return subcat
+
 # --- Page Config ---
 st.set_page_config(page_title="Wardrobe AI Stylist", page_icon="👗", layout="wide")
 

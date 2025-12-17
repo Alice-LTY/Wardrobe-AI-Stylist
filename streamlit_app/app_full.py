@@ -6,7 +6,7 @@ from google import genai
 from datetime import datetime
 
 # --- Page Config ---
-st.set_page_config(page_title="Wardrobe AI Stylist", page_icon="👗", layout="wide")
+st.set_page_config(page_title="Wardrobe AI Stylist", page_icon="", layout="wide")
 
 # --- Custom CSS (模仿 React App 配色) ---
 st.markdown("""
@@ -345,7 +345,7 @@ def get_ai_advice(prompt_text, wardrobe_df, api_key):
             return f"AI 思考時發生錯誤: {e}"
 
 # --- Main UI ---
-st.title("👗 Wardrobe AI Stylist")
+st.title(" Wardrobe AI Stylist")
 st.caption("Taica AIGC 期末專題 Demo | 基於 Wardrobe 全端系統延伸")
 
 # Sidebar: Settings
