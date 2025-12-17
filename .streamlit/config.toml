@@ -1,0 +1,7 @@
+[server]
+# 啟用檔案監控器
+fileWatcherType = "auto"
+
+[browser]
+# 收集使用統計
+gatherUsageStats = false
