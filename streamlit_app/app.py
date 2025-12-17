@@ -362,8 +362,8 @@ def get_ai_advice(prompt_text, wardrobe_df, api_key):
             return f"AI 思考時發生錯誤: {e}"
 
 # --- Main UI ---
-st.title("👗 Wardrobe AI Stylist")
-st.caption("Taica AIGC 期末專題 Demo | 基於 Wardrobe 全端系統延伸")
+st.title("Wardrobe AI Stylist")
+st.caption("AIOT HW4 | 基於 Wardrobe 全端系統延伸")
 
 # Sidebar: Settings
 with st.sidebar:
@@ -411,15 +411,17 @@ with tab1:
         categories += [cat for cat in all_categories if cat not in CATEGORY_ORDER]
         
         for category in categories:
-            # 分類標題
-            st.markdown(f'<div class="category-badge">{category}</div>', unsafe_allow_html=True)
+            # 分類標題（多語言顯示）
+            category_display = get_category_display_name(category)
+            st.markdown(f'<div class="category-badge">{category_display}</div>', unsafe_allow_html=True)
             category_items = df[df['category'] == category]
             
             # 按子分類分組
             subcategories = category_items['subcategory'].unique()
             for subcategory in subcategories:
                 if subcategory and pd.notna(subcategory):
-                    st.markdown(f'<h3 style="color: #484848; font-size: 19px; margin: 19px 0px 9px;">{subcategory}</h3>', unsafe_allow_html=True)
+                    subcategory_display = get_subcategory_display_name(subcategory)
+                    st.markdown(f'<h3 style="color: #484848; font-size: 19px; margin: 19px 0px 9px;">{subcategory_display}</h3>', unsafe_allow_html=True)
                 
                 subcategory_items = category_items[category_items['subcategory'] == subcategory]
                 
@@ -430,9 +432,9 @@ with tab1:
                         # 顯示商品圖片
                         st.image(item['image_url'], use_container_width=True)
                         
-                        # 商品資訊
+                        # 商品資訊（顯示完整名稱）
                         title = str(item['title']) if pd.notna(item['title']) else '未命名商品'
-                        st.markdown(f"**{title[:40]}{'...' if len(title) > 40 else ''}**")
+                        st.markdown(f"**{title}**")
                         st.caption(f"🎨 {item['color_name']}")
                         st.caption(f"📏 {item['size']}")
                         if pd.notna(item['quantity']) and item['quantity'] > 1:
@@ -465,7 +467,7 @@ with tab2:
     
     if add_method == "🔗 貼商品連結（爬蟲自動抓取）":
         st.markdown("---")
-        st.markdown("#### 🕷️ 從 GRL 網站抓取商品")
+        st.markdown("#### 日牌網站抓取商品")
         
         # 商品 URL 輸入
         product_url = st.text_input(

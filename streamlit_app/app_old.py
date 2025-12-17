@@ -231,8 +231,8 @@ def get_ai_advice(prompt_text, wardrobe_df, api_key):
             return f"AI 思考時發生錯誤: {e}"
 
 # --- Main UI ---
-st.title("👗 Wardrobe AI Stylist")
-st.caption("Taica AIGC 期末專題 Demo | 基於 Wardrobe 全端系統延伸")
+st.title("Wardrobe AI Stylist")
+st.caption("AIOT HW4 | 基於 Wardrobe 全端系統延伸")
 
 # Sidebar: Settings
 with st.sidebar:
