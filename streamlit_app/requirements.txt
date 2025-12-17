@@ -1,5 +1,12 @@
 streamlit
 pandas
 google-genai
+beautifulsoup4
+requests
+deep_translator
+googletrans==4.0.0rc1
 Pillow
 requests
+beautifulsoup4
+requests
+googletrans==4.0.0rc1

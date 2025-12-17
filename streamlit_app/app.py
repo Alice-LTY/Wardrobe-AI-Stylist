@@ -2,8 +2,12 @@ import streamlit as st
 import pandas as pd
 import sqlite3
 import os
+import sys
 from google import genai
 from datetime import datetime
+
+# 添加父目錄到 path 以導入 backend 模組
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # --- Page Config ---
 st.set_page_config(page_title="Wardrobe AI Stylist", page_icon="👗", layout="wide")
@@ -439,7 +443,120 @@ with tab1:
 with tab2:
     st.subheader("➕ 新增商品到衣櫥")
     
-    with st.form("add_item_form"):
+    # 選擇新增方式
+    add_method = st.radio(
+        "選擇新增方式",
+        ["🔗 貼商品連結（爬蟲自動抓取）", "✍️ 手動輸入"],
+        horizontal=True
+    )
+    
+    if add_method == "🔗 貼商品連結（爬蟲自動抓取）":
+        st.markdown("---")
+        st.markdown("#### 🕷️ 從 GRL 網站抓取商品")
+        
+        # 商品 URL 輸入
+        product_url = st.text_input(
+            "商品連結或代碼",
+            placeholder="例如：https://www.grail.bz/disp/item/tw1122/ 或直接輸入 tw1122",
+            help="支援完整 URL 或只輸入商品代碼"
+        )
+        
+        # 爬取按鈕
+        if st.button("🔍 抓取商品資訊", type="primary", use_container_width=True):
+            if not product_url:
+                st.error("❌ 請輸入商品連結或代碼")
+            else:
+                with st.spinner("正在抓取商品資訊..."):
+                    try:
+                        # 導入爬蟲函數
+                        from backend.utils.crawl import scrape_product_page
+                        
+                        # 執行爬蟲
+                        product_data = scrape_product_page(product_url)
+                        
+                        if "error" in product_data:
+                            st.error(f"❌ 爬取失敗：{product_data['error']}")
+                        else:
+                            # 將資料存入 session_state
+                            st.session_state['scraped_product'] = product_data
+                            st.success("✅ 成功抓取商品資訊！請選擇顏色和尺寸後加入衣櫥。")
+                            st.rerun()
+                    except Exception as e:
+                        st.error(f"❌ 爬取錯誤：{str(e)}")
+        
+        # 如果已經爬取到資料，顯示選擇介面
+        if 'scraped_product' in st.session_state:
+            product_data = st.session_state['scraped_product']
+            
+            st.markdown("---")
+            st.markdown("#### 📦 商品資訊")
+            
+            col_img, col_info = st.columns([1, 2])
+            
+            with col_img:
+                if product_data.get('colors') and len(product_data['colors']) > 0:
+                    st.image(product_data['colors'][0]['image_url'], width=250)
+            
+            with col_info:
+                st.markdown(f"**商品名稱**: {product_data.get('title', 'N/A')}")
+                st.markdown(f"**商品代碼**: {product_data.get('product_code', 'N/A')}")
+                st.markdown(f"**分類**: {product_data.get('category', 'N/A')} > {product_data.get('subcategory', 'N/A')}")
+                if product_data.get('price_twd'):
+                    st.markdown(f"**價格**: NT$ {product_data['price_twd']:,}")
+            
+            # 顏色和尺寸選擇
+            st.markdown("#### 🎨 選擇顏色與尺寸")
+            
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                selected_color = st.selectbox(
+                    "顏色",
+                    options=[c['color'] for c in product_data.get('colors', [])],
+                    key="scraped_color"
+                )
+            
+            with col2:
+                selected_size = st.selectbox(
+                    "尺寸",
+                    options=list(product_data.get('sizes', [])),
+                    key="scraped_size"
+                )
+            
+            with col3:
+                quantity = st.number_input("數量", min_value=1, value=1, key="scraped_qty")
+            
+            # 加入衣櫥按鈕
+            if st.button("💾 加入衣櫥", type="primary", use_container_width=True):
+                # 找到選擇的顏色圖片
+                selected_color_data = next(
+                    (c for c in product_data['colors'] if c['color'] == selected_color),
+                    product_data['colors'][0]
+                )
+                
+                success, message = add_item_to_wardrobe(
+                    product_code=product_data['product_code'],
+                    title=product_data['title'],
+                    color_name=selected_color,
+                    size=selected_size,
+                    image_url=selected_color_data['image_url'],
+                    category=product_data['category'],
+                    subcategory=product_data.get('subcategory', ''),
+                    quantity=quantity
+                )
+                
+                if success:
+                    st.success(message)
+                    st.balloons()
+                    # 清除 session_state
+                    del st.session_state['scraped_product']
+                    st.rerun()
+                else:
+                    st.error(message)
+    
+    else:  # 手動輸入
+        st.markdown("---")
+        with st.form("add_item_form"):
         col1, col2 = st.columns(2)
         
         with col1:
@@ -455,22 +572,22 @@ with tab2:
         
         image_url = st.text_input("圖片 URL*", placeholder="https://cdn.grail.bz/images/...")
         
-        submitted = st.form_submit_button("💾 新增到衣櫥", use_container_width=True)
-        
-        if submitted:
-            if not all([product_code, title, color_name, size, image_url]):
-                st.error("❌ 請填寫所有必填欄位（標記 * 者）")
-            else:
-                success, message = add_item_to_wardrobe(
-                    product_code, title, color_name, size, image_url,
-                    category, subcategory, quantity
-                )
-                if success:
-                    st.success(message)
-                    st.balloons()
-                    st.rerun()
+            submitted = st.form_submit_button("💾 新增到衣櫥", use_container_width=True)
+            
+            if submitted:
+                if not all([product_code, title, color_name, size, image_url]):
+                    st.error("❌ 請填寫所有必填欄位（標記 * 者）")
                 else:
-                    st.error(message)
+                    success, message = add_item_to_wardrobe(
+                        product_code, title, color_name, size, image_url,
+                        category, subcategory, quantity
+                    )
+                    if success:
+                        st.success(message)
+                        st.balloons()
+                        st.rerun()
+                    else:
+                        st.error(message)
 
 # === Tab 3: AI 造型師 ===
 with tab3:
