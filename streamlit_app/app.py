@@ -572,22 +572,22 @@ with tab2:
             
             image_url = st.text_input("圖片 URL*", placeholder="https://cdn.grail.bz/images/...")
             
-                submitted = st.form_submit_button("💾 新增到衣櫥", use_container_width=True)
-                
-                if submitted:
-                    if not all([product_code, title, color_name, size, image_url]):
-                        st.error("❌ 請填寫所有必填欄位（標記 * 者）")
+            submitted = st.form_submit_button("💾 新增到衣櫥", use_container_width=True)
+            
+            if submitted:
+                if not all([product_code, title, color_name, size, image_url]):
+                    st.error("❌ 請填寫所有必填欄位（標記 * 者）")
+                else:
+                    success, message = add_item_to_wardrobe(
+                        product_code, title, color_name, size, image_url,
+                        category, subcategory, quantity
+                    )
+                    if success:
+                        st.success(message)
+                        st.balloons()
+                        st.rerun()
                     else:
-                        success, message = add_item_to_wardrobe(
-                            product_code, title, color_name, size, image_url,
-                            category, subcategory, quantity
-                        )
-                        if success:
-                            st.success(message)
-                            st.balloons()
-                            st.rerun()
-                        else:
-                            st.error(message)
+                        st.error(message)
 
 # === Tab 3: AI 造型師 ===
 with tab3:
