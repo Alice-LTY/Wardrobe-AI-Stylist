@@ -2,7 +2,8 @@
 
 **課程名稱**：生成式 AI：文字與圖像生成的原理與實務 (Taica AIGC)  
 **指導教授**：蔡炎龍 教授 (Prof. Yen-Lung Tsai)  
-**參考專案**：[yenlung/AI-Demo](https://github.com/yenlung/AI-Demo)
+**參考專案**：[yenlung/AI-Demo](https://github.com/yenlung/AI-Demo)  
+**核心技術參考**：[【Demo06a】RAG01_打造向量資料庫](https://github.com/yenlung/AI-Demo/blob/master/%E3%80%90Demo06a%E3%80%91RAG01_%E6%89%93%E9%80%A0%E5%90%91%E9%87%8F%E8%B3%87%E6%96%99%E5%BA%AB.ipynb)
 
 ---
 
@@ -10,7 +11,7 @@
 
 **標題：結合檢索增強生成 (RAG) 與多模態大型語言模型之個人化穿搭顧問系統**
 
-本專題「Wardrobe AI Stylist」旨在將傳統的 Full-Stack 衣櫥管理系統，延伸整合為具備生成式 AI 能力的智慧應用。原系統透過爬蟲構建了包含豐富後設資料（Metadata，如材質、顏色、版型）的 SQLite 資料庫，本研究以此為基礎，實作了「檢索增強生成 (Retrieval-Augmented Generation, RAG)」架構。
+本專題「Wardrobe AI Stylist」旨在將傳統的 Full-Stack 衣櫥管理系統，延伸整合為具備生成式 AI 能力的智慧應用。原系統透過爬蟲自動提取商品 URL 資訊，構建了包含豐富後設資料（Metadata，如材質、顏色、版型、圖片連結）的 SQLite 資料庫，本研究以此為基礎，實作了「檢索增強生成 (Retrieval-Augmented Generation, RAG)」架構。
 
 在深度學習模型部署方面，我們面臨了 Streamlit Community Cloud 等免費 PaaS 平台缺乏 GPU 算力，無法本地運行 LLaMA-3 或 Stable Diffusion 等大型模型的限制（Deploy Deep Learning on Streamlit GPU Issue）。為解決此問題，本專題採用「混合雲端推論 (Hybrid Cloud Inference)」策略：前端利用 Streamlit 構建輕量化互動介面，並直接讀取本地結構化資料庫；核心推論則透過 API 串接 **Google Gemini 1.5 Pro/Flash** 多模態模型。
 

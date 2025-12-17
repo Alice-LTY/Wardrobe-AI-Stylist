@@ -505,7 +505,7 @@ with st.sidebar:
         category_filter = "全部"
     
     st.markdown("---")
-    st.info("💡 本專題使用 RAG 技術，讀取 SQLite 資料庫並透過 LLM 生成建議。")
+    st.info("💡 本專題使用 RAG 技術，讀取 SQLite 資料庫並透過 LLM 生成建議。結合爬蟲功能，可自動提取商品 URL 資訊。")
     st.markdown("📦 原始專案: [Wardrobe](https://github.com/Alice-LTY/Wardrobe)")
 
 # 創建標籤頁
