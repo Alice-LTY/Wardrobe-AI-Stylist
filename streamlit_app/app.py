@@ -312,6 +312,60 @@ def delete_item_from_wardrobe(key):
         st.error(f"刪除失敗：{str(e)}")
         return False
 
+def update_wardrobe_item(old_key, color_name, size, quantity, category, subcategory):
+    """更新衣櫥商品資訊"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        # 從舊的 key 提取 title
+        title = old_key.split('_')[0] if '_' in old_key else old_key
+        
+        # 生成新的 key
+        new_key = f"{title}_{color_name}_{size}"
+        
+        # 更新商品資訊
+        cursor.execute("""
+            UPDATE wardrobe 
+            SET key = ?, color_name = ?, size = ?, quantity = ?, category = ?, subcategory = ?
+            WHERE key = ?
+        """, (new_key, color_name, size, quantity, category, subcategory, old_key))
+        
+        conn.commit()
+        conn.close()
+        return True, new_key
+    except Exception as e:
+        conn.close()
+        st.error(f"更新失敗：{str(e)}")
+        return False, None
+
+def update_wardrobe_item(old_key, color_name, size, quantity, category, subcategory):
+    """更新衣櫥商品資訊"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        # 從舊的 key 提取 title
+        title = old_key.split('_')[0] if '_' in old_key else old_key
+        
+        # 生成新的 key
+        new_key = f"{title}_{color_name}_{size}"
+        
+        # 更新商品資訊
+        cursor.execute("""
+            UPDATE wardrobe 
+            SET key = ?, color_name = ?, size = ?, quantity = ?, category = ?, subcategory = ?
+            WHERE key = ?
+        """, (new_key, color_name, size, quantity, category, subcategory, old_key))
+        
+        conn.commit()
+        conn.close()
+        return True, new_key
+    except Exception as e:
+        conn.close()
+        st.error(f"更新失敗：{str(e)}")
+        return False, None
+
 def update_item_quantity(key, new_quantity):
     """更新商品數量"""
     conn = get_db_connection()
@@ -391,6 +445,48 @@ tab1, tab2, tab3 = st.tabs(["🏠 我的衣櫥", "➕ 新增商品", "🤖 AI �
 
 # === Tab 1: 我的衣櫥 ===
 with tab1:
+    # 處理編輯對話框
+    if 'editing_item' in st.session_state:
+        item = st.session_state['editing_item']
+        
+        st.markdown("### ✏️ 編輯商品")
+        st.markdown("---")
+        
+        with st.form("edit_item_form"):
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                new_color = st.text_input("🎨 顏色", value=item.get('color_name', ''), key="edit_color")
+                new_size = st.text_input("📏 尺寸", value=item.get('size', ''), key="edit_size")
+                new_quantity = st.number_input("📦 數量", min_value=1, value=int(item.get('quantity', 1)), key="edit_quantity")
+            
+            with col2:
+                new_category = st.selectbox("📂 分類", CATEGORY_ORDER, 
+                                           index=CATEGORY_ORDER.index(item.get('category')) if item.get('category') in CATEGORY_ORDER else 0,
+                                           key="edit_category")
+                new_subcategory = st.text_input("📑 子分類", value=item.get('subcategory', ''), key="edit_subcategory")
+            
+            col_save, col_cancel = st.columns(2)
+            with col_save:
+                submitted = st.form_submit_button("💾 儲存", use_container_width=True, type="primary")
+            with col_cancel:
+                cancelled = st.form_submit_button("❌ 取消", use_container_width=True)
+            
+            if submitted:
+                success, new_key = update_wardrobe_item(
+                    item['key'], new_color, new_size, new_quantity, new_category, new_subcategory
+                )
+                if success:
+                    st.success(f"✅ 更新成功！")
+                    del st.session_state['editing_item']
+                    st.rerun()
+            
+            if cancelled:
+                del st.session_state['editing_item']
+                st.rerun()
+        
+        st.markdown("---")
+    
     # 載入資料
     df = load_wardrobe_data(search_query, None if category_filter == "全部" else category_filter)
     
