@@ -557,37 +557,37 @@ with tab2:
     else:  # 手動輸入
         st.markdown("---")
         with st.form("add_item_form"):
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            product_code = st.text_input("商品代碼*", placeholder="例如：TW1122")
-            title = st.text_input("商品名稱*", placeholder="例如：薄紗分層裙子")
-            color_name = st.text_input("顏色*", placeholder="例如：黑色的（ブラック）")
-            size = st.text_input("尺寸*", placeholder="例如：S")
-        
-        with col2:
-            category = st.selectbox("分類*", CATEGORY_ORDER)
-            subcategory = st.text_input("子分類", placeholder="例如：スカート")
-            quantity = st.number_input("數量", min_value=1, value=1)
-        
-        image_url = st.text_input("圖片 URL*", placeholder="https://cdn.grail.bz/images/...")
-        
-            submitted = st.form_submit_button("💾 新增到衣櫥", use_container_width=True)
+            col1, col2 = st.columns(2)
             
-            if submitted:
-                if not all([product_code, title, color_name, size, image_url]):
-                    st.error("❌ 請填寫所有必填欄位（標記 * 者）")
-                else:
-                    success, message = add_item_to_wardrobe(
-                        product_code, title, color_name, size, image_url,
-                        category, subcategory, quantity
-                    )
-                    if success:
-                        st.success(message)
-                        st.balloons()
-                        st.rerun()
+            with col1:
+                product_code = st.text_input("商品代碼*", placeholder="例如：TW1122")
+                title = st.text_input("商品名稱*", placeholder="例如：薄紗分層裙子")
+                color_name = st.text_input("顏色*", placeholder="例如：黑色的（ブラック）")
+                size = st.text_input("尺寸*", placeholder="例如：S")
+            
+            with col2:
+                category = st.selectbox("分類*", CATEGORY_ORDER)
+                subcategory = st.text_input("子分類", placeholder="例如：スカート")
+                quantity = st.number_input("數量", min_value=1, value=1)
+            
+            image_url = st.text_input("圖片 URL*", placeholder="https://cdn.grail.bz/images/...")
+            
+                submitted = st.form_submit_button("💾 新增到衣櫥", use_container_width=True)
+                
+                if submitted:
+                    if not all([product_code, title, color_name, size, image_url]):
+                        st.error("❌ 請填寫所有必填欄位（標記 * 者）")
                     else:
-                        st.error(message)
+                        success, message = add_item_to_wardrobe(
+                            product_code, title, color_name, size, image_url,
+                            category, subcategory, quantity
+                        )
+                        if success:
+                            st.success(message)
+                            st.balloons()
+                            st.rerun()
+                        else:
+                            st.error(message)
 
 # === Tab 3: AI 造型師 ===
 with tab3:
