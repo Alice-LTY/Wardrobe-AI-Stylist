@@ -49,7 +49,7 @@
 ## 3. GitHub 與 Streamlit App
 
 * **GitHub Repository**: [Wardrobe-AI-Stylist](https://github.com/Alice-LTY/Wardrobe-AI-Stylist)
-* **Streamlit App Demo**: [🎨 線上體驗](https://wardrobe-ai-stylist.streamlit.app)
+* **Streamlit App Demo**: [Link](https://wardrobe-ai-stylist-dytkofxkrxgzvwacyzpzmf.streamlit.app/)
 * **Original Full-Stack Project**: [Wardrobe (Private)](https://github.com/Alice-LTY/Wardrobe)
 
 ---
@@ -66,7 +66,7 @@
 
 ### 功能展示
 
-#### 🤖 AI 穿搭顧問 (AI Stylist)
+#### ✨ AI 穿搭顧問 (AI Stylist)
 使用者輸入自然語言指令（例如：「今天下雨，氣溫 18 度，要去圖書館唸書」），系統執行以下流程：
 1.  **Retrieve**: Python 腳本查詢 `wardrobe.db`，撈出所有「長袖」、「外套」、「長褲」類別的衣物。
 2.  **Augment**: 將這些衣物的屬性（顏色、材質、圖片 URL）組合成結構化 Prompt。

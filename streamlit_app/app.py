@@ -509,7 +509,7 @@ with st.sidebar:
     st.markdown("📦 原始專案: [Wardrobe](https://github.com/Alice-LTY/Wardrobe)")
 
 # 創建標籤頁
-tab1, tab2, tab3 = st.tabs(["🏠 我的衣櫥", "➕ 新增商品", "🤖 AI 造型師"])
+tab1, tab2, tab3 = st.tabs(["🏠 我的衣櫥", "➕ 新增商品", "✨ AI 造型師"])
 
 # === Tab 1: 我的衣櫥 ===
 with tab1:
