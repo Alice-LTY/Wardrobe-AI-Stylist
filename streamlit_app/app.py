@@ -317,11 +317,15 @@ else:
             cols = st.columns(4)
             for idx, (_, item) in enumerate(subcategory_items.iterrows()):
                 with cols[idx % 4]:
+                    # 安全處理標題
+                    title = item['title'] if item['title'] and pd.notna(item['title']) else '未命名商品'
+                    title_display = title[:30] + '...' if len(title) > 30 else title
+                    
                     # 使用 HTML 創建卡片效果
                     card_html = f"""
                     <div class="product-card">
-                        <img src="{item['image_url']}" class="product-image" alt="{item['title']}">
-                        <div class="product-title">{item['title'][:30]}...</div>
+                        <img src="{item['image_url']}" class="product-image" alt="{title}">
+                        <div class="product-title">{title_display}</div>
                         <div class="product-color">{item['color_name']}</div>
                     </div>
                     """
