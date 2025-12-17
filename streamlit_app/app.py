@@ -770,7 +770,7 @@ with tab2:
 
 # === Tab 3: AI 造型師 ===
 with tab3:
-    st.subheader("🤖 智慧造型師")
+    st.subheader("✨ 智慧造型師")
     
     df_for_ai = load_wardrobe_data()
     
