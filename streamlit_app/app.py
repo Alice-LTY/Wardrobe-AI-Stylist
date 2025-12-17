@@ -381,13 +381,75 @@ def update_item_quantity(key, new_quantity):
         st.error(f"更新失敗：{str(e)}")
         return False
 
-def get_ai_advice(prompt_text, wardrobe_df, api_key):
-    """呼叫 Gemini API"""
-    if not api_key:
-        return "請先輸入 API Key"
+def get_demo_advice(prompt_text, wardrobe_df):
+    """Demo 模式：生成範例穿搭建議"""
+    # 簡單的關鍵字匹配
+    keywords_formal = ['面試', '正式', '會議', '商務', '上班']
+    keywords_casual = ['休閒', '逛街', '約會', '咖啡', '週末']
+    keywords_party = ['派對', '聚會', '夜店', '慶祝', '晚宴']
     
-    client = genai.Client(api_key=api_key)
-    model = "gemini-1.5-flash"
+    style = "正式專業"
+    if any(kw in prompt_text for kw in keywords_casual):
+        style = "休閒舒適"
+    elif any(kw in prompt_text for kw in keywords_party):
+        style = "時尚亮眼"
+    
+    # 選擇前 3-4 件單品
+    items = []
+    for idx, row in wardrobe_df.head(4).iterrows():
+        items.append({
+            'title': row['title'],
+            'color': row['color_name'],
+            'category': row['category']
+        })
+    
+    # 生成建議
+    advice = f"""
+🎭 **Demo 模式提示**：這是範例建議。如需真實的個性化 AI 建議，請輸入 Gemini API Key。
+
+---
+
+**您的需求**：{prompt_text}
+
+**建議風格**：{style}
+
+**穿搭建議**：
+
+根據您的衣櫥，我為您挑選了以下搭配：
+
+"""
+    
+    if len(items) >= 3:
+        advice += f"""
+1. **上衣**：{items[0]['title']}（{items[0]['color']}）
+   - 適合作為主要單品，展現{style}的氣質
+
+2. **下身**：{items[1]['title']}（{items[1]['color']}）
+   - 與上衣形成協調搭配
+
+3. **配件**：{items[2]['title']}（{items[2]['color']}）
+   - 增添整體造型的層次感
+"""
+    else:
+        advice += "您的衣櫥裡單品不足，建議多添加一些基本款！"
+    
+    advice += """
+
+---
+
+💡 **如何獲取真實 AI 建議**：
+1. 前往 [Google AI Studio](https://aistudio.google.com/app/apikey)
+2. 登入 Google 帳號並創建 API Key
+3. 將 API Key 貼到左側邊欄
+4. 重新生成穿搭建議，即可獲得個性化推薦！
+"""
+    
+    return advice
+
+def get_ai_advice(prompt_text, wardrobe_df, api_key):
+    """呼叫 Gemini API（支援 Demo 模式）"""
+    if not api_key or len(api_key.strip()) < 20:
+        return get_demo_advice(prompt_text, wardrobe_df)
     
     # 構建 Context (RAG)
     inventory_context = "我的衣櫥清單如下:\n"
@@ -407,12 +469,18 @@ def get_ai_advice(prompt_text, wardrobe_df, api_key):
     
     with st.spinner("AI 造型師正在翻箱倒櫃..."):
         try:
+            client = genai.Client(api_key=api_key)
+            model = "gemini-1.5-flash"
             response = client.models.generate_content(
                 model=model,
                 contents=full_prompt
             )
             return response.text
         except Exception as e:
+            # API Key 錯誤時改用 Demo 模式
+            if "API key not valid" in str(e) or "INVALID_ARGUMENT" in str(e):
+                st.warning("⚠️ API Key 無效，已切換到 Demo 模式")
+                return get_demo_advice(prompt_text, wardrobe_df)
             return f"AI 思考時發生錯誤: {e}"
 
 # --- Main UI ---
@@ -702,7 +770,7 @@ with tab2:
 
 # === Tab 3: AI 造型師 ===
 with tab3:
-    st.subheader("🤖 請問造型師")
+    st.subheader("🤖 智慧造型師")
     
     df_for_ai = load_wardrobe_data()
     
@@ -710,17 +778,17 @@ with tab3:
         st.warning("衣櫥是空的，請先新增一些衣服！")
     else:
         user_input = st.text_area(
-            "今天要去哪裡？心情如何？", 
+            "今天要去哪裡？追求什麼風格的穿搭？", 
             placeholder="例如：明天要去面試，想要正式一點但不要太老氣",
             height=100
         )
         
         if st.button("✨ 生成穿搭建議", type="primary", use_container_width=True):
-            if not api_key:
-                st.error("❌ 請在側邊欄輸入 Gemini API Key")
-            elif not user_input:
+            if not user_input:
                 st.error("❌ 請描述你的需求")
             else:
+                if not api_key:
+                    st.info("ℹ️ 未輸入 API Key，將使用 Demo 模式展示範例建議")
                 advice = get_ai_advice(user_input, df_for_ai, api_key)
                 
                 st.markdown(f"""
@@ -731,7 +799,7 @@ with tab3:
                 """, unsafe_allow_html=True)
                 
                 # 推薦單品
-                st.markdown("#### 🎯 相關單品")
+                st.markdown("#### 相關單品")
                 img_cols = st.columns(4)
                 col_idx = 0
                 for idx, row in df_for_ai.iterrows():

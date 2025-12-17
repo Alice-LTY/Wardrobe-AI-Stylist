@@ -37,7 +37,7 @@ source_cursor.execute("SELECT DISTINCT category, subcategory FROM wardrobe ORDER
 categories = source_cursor.fetchall()
 
 # 為每個子分類選擇最多 4 件商品
-print("🎯 為每個子分類選擇最多 4 件商品...")
+print("為每個子分類選擇最多 4 件商品...")
 selected_product_codes = set()
 selected_keys = []
 
