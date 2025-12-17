@@ -1,7 +1,6 @@
 # Wardrobe AI Stylist: 基於 RAG 與多模態模型的智慧衣櫥助手
 
 **課程名稱**：生成式 AI：文字與圖像生成的原理與實務 (Taica AIGC)  
-**指導教授**：蔡炎龍 教授 (Prof. Yen-Lung Tsai)  
 **參考專案**：[yenlung/AI-Demo](https://github.com/yenlung/AI-Demo)  
 **核心技術參考**：[【Demo06a】RAG01_打造向量資料庫](https://github.com/yenlung/AI-Demo/blob/master/%E3%80%90Demo06a%E3%80%91RAG01_%E6%89%93%E9%80%A0%E5%90%91%E9%87%8F%E8%B3%87%E6%96%99%E5%BA%AB.ipynb)
 
